@@ -1,0 +1,495 @@
+---
+title: "Manipulating, analyzing and exporting data with tidyverse"
+subtitle: "Data Manipulation using **dplyr** and **tidyr**"
+author: "Srikanth Aravamuthan & Michael Liou"
+date: "September 25, 2019"
+output:
+  xaringan::moon_reader:
+    css: ["custom.css", "ninjutsu"]
+    nature:
+      ratio: 16:10
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA, cache = FALSE, fig.width = 6, fig.align = "center")
+options(tibble.print_max = 20)
+
+```
+
+```{r include=FALSE}
+if(file.exists("../xaringan_reveal_parentheses_balanced.R")){
+  source(file = "../xaringan_reveal_parentheses_balanced.R")
+} else {
+  source(file = "https://raw.githubusercontent.com/EvaMaeRey/little_flipbooks_library/master/xaringan_reveal_parentheses_balanced.R")
+}
+
+```
+
+<style>
+
+.left-column {
+  color: #777;
+  width: 20%;
+  height: 92%;
+  float: left;
+}
+.left-column h2:last-of-type, .left-column h3:last-child {
+  color: #000;
+}
+.right-column {
+  width: 75%;
+  float: right;
+  padding-top: 1em;
+}
+.pull-left {
+  float: left;
+  width: 47%;
+}
+.pull-right {
+  float: right;
+  width: 47%;
+}
+.pull-right ~ * {
+  clear: both;
+}
+
+.vertical-center-100 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 100%
+}
+
+kbd {
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
+    color: #333;
+    display: inline-block;
+    font-size: .85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+#cf {
+  position:relative;
+  height:281px;
+  width:450px;
+  margin:0 auto;
+}
+
+#cf img {
+  position:absolute;
+  left:0;
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+}
+
+#cf img.top:hover {
+  opacity:0;
+}
+
+</style>
+
+# **Setup**
+
+.pull-left[
+`tidyverse` installs several packages useful for data analysis such as `tidyr`, `dplyr`, `ggplot2`, `tibble`, etc.
+
+Let's load the `tidyverse` including `dplyr`.
+
+```{r eval=FALSE}
+# install the tidyverse packages including dplyr
+install.packages(tidyverse)
+
+```
+
+```{r}
+# load the tidyverse packages including dplyr
+library(tidyverse)
+
+```
+]
+
+.pull-right[
+<img src="tidyverse-2.jpeg" width="100%">
+] 
+
+---
+
+# **Setup**
+
+We are studying the species repartition and weight of animals caught in plots in our study area.
+
+Let's read in the data using the `read_csv()` function from the `tidyverse` package `readr`.
+
+```{r eval=FALSE}
+# download the CSV file that contains the survey data from figshare
+download.file(url="https://ndownloader.figshare.com/files/2292169",
+              destfile = "data/portal_data_joined.csv")
+
+```
+
+```{r}
+# load into memory the content of the CSV file as an object of class data.frame
+surveys <- read_csv("data/portal_data_joined.csv")
+
+```
+
+---
+
+# **Presentation of the Survey Data**
+
+Each row holds information for a single animal.
+
+| Column          | Description                        |
+| --------------- | ---------------------------------- |
+| record_id       | Unique id for the observation      |
+| month           | Month of observation               |
+| day             | Day of observation                 |
+| year            | Year of observation                |
+| plot_id         | ID of a particular plot            |
+| species_id      | 2-letter code                      |
+| sex             | Sex of animal (“M”, “F”)           |
+| hindfoot_length | Length of the hindfoot in mm       |
+| weight          | Weight of the animal in grams      |
+| genus           | Genus of animal                    |
+| species         | Species of animal                  |
+| taxon           | e.g. Rodent, Reptile, Bird, Rabbit |
+| plot_type       | Type of plot                       |
+
+---
+
+# **Review**
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read, especially for complicated operations.
+
+```{r}
+table(surveys$species_id[!is.na(surveys$weight) | 
+                         !is.na(surveys$hindfoot_length) |
+                         !is.na(surveys$sex)])[table(surveys$species_id[!is.na(surveys$weight) |
+                                                                        !is.na(surveys$hindfoot_length) |
+                                                                        !is.na(surveys$sex)]) >= 50]
+
+```
+
+---
+
+# **Review**
+
+Bracket subsetting is handy, but it can be cumbersome and difficult to read, especially for complicated operations.
+
+```{r}
+surveys_complete <- surveys[!is.na(surveys$weight) | 
+                            !is.na(surveys$hindfoot_length) | 
+                            !is.na(surveys$sex),]
+tab <- table(surveys_complete$species_id)
+tab[tab >= 50]
+
+```
+
+---
+
+.vertical-center-100[
+<img src="my-eyes.gif" width="100%">
+]
+
+---
+
+# **Where are we going** 
+
+It is rare that we get the data in exactly the right form we need. Often we’ll need to create some new variables or summaries, or maybe we just want to rename the variables or reorder the observations in order to make the data a little easier to work with.
+
+```{r surveys_complete, echo = TRUE, eval = FALSE}
+surveys %>%
+  filter(!is.na(weight), 
+         !is.na(hindfoot_length),
+         !is.na(sex)) %>% 
+  count(species_id) %>% 
+  filter(n >= 50)
+
+```
+
+---
+
+# **How do we get there**
+
+We will discuss five key `dplyr` functions that will allow us to solve the vast majority of your data manipulation challenges:
+
+  -  Pick observations by their values (`filter()`).
+  -  Reorder the rows (`arrange()`).
+  -  Pick variables by their names (`select()`).
+  -  Create new variables with functions of existing variables (`mutate()`).
+  -  Collapse many values down to a single summary (`summarise()`).
+
+These can all be used in conjunction with `group_by()` which changes the scope of each function from operating on the entire dataset to operating on it group-by-group.
+
+---
+
+# **How do we get there**
+
+All verbs work similarly:
+
+  1. The first argument is a data frame.
+  2. The subsequent arguments describe what to do with the data frame, using the variable names (without quotes).
+  3. The result is a new data frame.
+
+Together these properties make it easy to chain together multiple simple steps to achieve a complex result.
+
+.pull-left[
+<img src="dplyr-1.png" width="100%">
+<img src="dplyr-3.png" width="100%">
+]
+
+.pull-right[
+<img src="dplyr-2.png" width="100%">
+<img src="dplyr-4.png" width="100%">
+]
+
+---
+
+# **The Treachery of Nesting**
+
+.pull-left[
+When we have complex code, this often will mean that we will have to nest those parentheses together. This makes our R code hard to read and understand.
+
+Piping lets us pass an intermediate result onto the next function.
+
+Each function can be chained together in a single statement without needing variables to store the intermediate data frame.
+
+Pipes in R look like `%>%` and are made available via the `magrittr` package, installed automatically
+with `dplyr`. 
+
+`x %>% f(y)` turns into `f(x, y)`, and `x %>% f(y) %>% g(z)` turns into `g(f(x, y), z)` and so on. We can use the pipe to rewrite multiple operations in a way that we can read left-to-right, top-to-bottom.
+
+If we use RStudio, we can type the pipe with <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you have a PC or <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> if you have a Mac.
+]
+
+.pull-right[
+<div id="cf">
+  <img class="bottom" src="magrittr-1.jpeg" />
+  <img class="top" src="magrittr-2.jpeg" />
+</div>
+]
+
+---
+
+# **Piping**
+
+.vertical-center-100[
+<img src="assembly-line.png" width="100%">
+]
+
+---
+
+`r apply_reveal("surveys_complete")`
+
+---
+
+# **Help**
+
+.pull-left[
+Nametags: Flip your nametags to the red end
+
+Help Documentation: e.g. `?filter`
+
+Cheatsheet: https://github.com/rstudio/cheatsheets/raw/master/data-transformation.pdf
+]
+
+.pull-right[
+<img src="help-1.gif" width="100%">
+]
+
+---
+
+# **Challenge**
+
+Using pipes, subset the `surveys` data that meets the following criteria: 
+
+  - Include animals collected before 1995 
+  - Retain only the columns `year`, `sex`, and `weight`
+
+---
+
+# **Challenge**
+
+Create a new data frame from the `surveys` data that meets the following criteria: 
+
+  - Contains the `species_id` column
+  - Contains a new column called `hindfoot_half` containing values that are half the `hindfoot_length` values
+  - For the `hindfoot_half` column, there should be no `NA`s and all values should be less than 30
+
+**Hint**: Think about how the commands should be ordered to produce this data frame!
+
+---
+
+# **Challenge**
+
+1. How many animals were caught in each `plot_type` surveyed?
+
+2. Use `group_by()` and `summarize()` to find the mean, min, and max hindfoot length for each species (using `species_id`). Also add the number of observations (Hint: See `?n`).
+
+3. What was the heaviest animal measured in each year? Return the columns `year`, `genus`, `species_id`, and `weight`.
+
+---
+
+# **Summary**
+
+Why we should be using pipes in R:
+
+ - Structure the sequence of your data operations from left to right, as apposed to from inside and out
+ - Avoid nested function calls
+ - Minimize the need for local variables and function definitions
+ - Make it easy to add steps anywhere in the sequence of operations
+
+---
+
+# **Tidy Data**
+
+In the spreadsheet lesson, we discussed how to structure our data leading to the three rules defining a tidy dataset:
+
+  1. Each variable has its own column
+  2. Each observation has its own row
+  3. Each value must have its own cell
+
+<img src="tidy-1.png" width="100%">
+
+---
+
+# **Tidy Data**
+
+In the spreadsheet lesson, we discussed how to structure our data leading to the two rules defining a tidy dataset:
+
+  1. Put each dataset in a tibble.
+  2. Put each variable in a column.
+
+There are two main advantages:
+
+  1. Consitency
+  2. Vectorization
+
+---
+
+# **Spread**
+
+`spread()` takes three principal arguments:
+
+  1. The data
+  2. The key column variable whose values will become new column names.
+  3. The value column variable whose values will fill the new column variables.
+
+<img src="spread.png" width="50%">
+
+---
+
+# **Gather**
+
+`gather()` takes four principal arguments:
+
+  1. The data
+  2. The key column variable we wish to create from column names.
+  3. The values column variable we wish to create and fill with values associated with the key.
+  4. The names of the columns we use to fill the key variable (or to drop).
+
+<img src="gather.png" width="50%">
+
+---
+
+<img src="gather.gif" width="100%">
+
+---
+
+.vertical-center-100[
+<img src="tidy-2.gif" width="100%">
+]
+
+---
+
+# **Help**
+
+.pull-left[
+Nametags: Flip your nametags to the red end
+
+Help Documentation: e.g. `?gather`
+
+Cheatsheet: https://github.com/rstudio/cheatsheets/raw/master/data-import.pdf
+]
+
+.pull-right[
+<img src="help-2.gif" width="100%">
+]
+
+---
+
+# **Challenge**
+
+1. Make a wide data frame with `year` as columns, `plot_id` as rows, and where the values are the number of genera per plot. You will need to summarize before reshaping, and use the function `n_distinct` to get the number of unique genera within a chunk of data. It's a powerful function! See `?n_distinct` for more.
+
+2. Now take that data frame, and make it long again, so each row is a unique `plot_id` `year` combination
+
+3. The `surveys` data set is not truly wide or long because there are two columns of measurement - `hindfoot_length` and `weight`.  This makes it difficult to do things like look at the relationship between mean values of each measurement per year in different plot types. Let's walk through a common solution for this type of problem. First, use `gather` to create a truly long dataset where we have a key column called `measurement` and a `value` column that takes on the value of either `hindfoot_length` or `weight`. Hint: You'll need to specify which columns are being gathered.
+
+4. With this new truly long data set, calculate the average of each `measurement` in each `year` for each different `plot_type`. Then `spread` them into a wide data set with a column for `hindfoot_length` and `weight`. Hint: Remember, you only need to specify the key and value columns for `spread`.
+
+---
+
+# **Summary**
+
+Why we should be using tidy data in R:
+
+- Don’t need to start from scratch and reinvent the wheel every time
+- Designed to facilitate initial exploration and analysis of the data
+- Simplify the development of data analysis tools that work well together
+- Make data analysis easier, allowing you to focus on the interesting domain problem, not on the uninteresting logistics of data
+
+---
+
+.vertical-center-100[
+<img src="pivot.gif" width="100%">
+]
+
+---
+
+class: middle
+
+# **Epilogue**
+
+.pull-left[
+<img src="assembly-line.gif" width="100%">
+<img src="tidy-3.gif" width="100%">
+]
+
+.pull-right[
+<img src="well-done-1.gif" width="100%">
+<img src="well-done-2.gif" width="100%">
+]
+
+---
+
+class: middle
+
+# **Thank You**
+
+.pull-left[
+<img src="fun-1.gif" width="100%">
+<img src="bye-bye.gif" width="100%">
+]
+
+.pull-right[
+<img src="fun-2.gif" width="100%">
+<img src="job-is done.gif" width="100%">
+]
+
+```{css, eval = TRUE, echo = F}
+.remark-code{line-height: 1.5; font-size: 75%}
+```
+

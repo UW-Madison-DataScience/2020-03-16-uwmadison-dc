@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <title>Introduction to R</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Srikanth Aravamuthan &amp; Michael Liou" />
+    <meta name="date" content="2019-09-25" />
+    <link href="base_files/remark-css-0.0.1/ninjutsu.css" rel="stylesheet" />
+    <link rel="stylesheet" href="custom.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Introduction to R
+## Vectors and Data Frames
+### Srikanth Aravamuthan &amp; Michael Liou
+### September 25, 2019
+
+---
+
+
+
+
+
+
+&lt;style&gt;
+
+.left-column {
+  color: #777;
+  width: 20%;
+  height: 92%;
+  float: left;
+}
+.left-column h2:last-of-type, .left-column h3:last-child {
+  color: #000;
+}
+.right-column {
+  width: 75%;
+  float: right;
+  padding-top: 1em;
+}
+.pull-left {
+  float: left;
+  width: 47%;
+}
+.pull-right {
+  float: right;
+  width: 47%;
+}
+.pull-right ~ * {
+  clear: both;
+}
+
+.vertical-center-100 {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  width: 100%
+}
+
+kbd {
+    background-color: #eee;
+    border-radius: 3px;
+    border: 1px solid #b4b4b4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .2), 0 2px 0 0 rgba(255, 255, 255, .7) inset;
+    color: #333;
+    display: inline-block;
+    font-size: .85em;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 4px;
+    white-space: nowrap;
+}
+
+&lt;/style&gt;
+
+# **What are we doing?**
+
+.pull-left[
+The term `R` is used to refer to both the programming language and the software that interprets the scripts written using it.
+
+`RStudio` is currently a very popular way to not only write your R scripts but also to interact with the R software. To function correctly, RStudio needs R and therefore both need to be installed on your computer.
+]
+
+.pull-right[
+&lt;img src="the-letter-r.jpg" width="100%"&gt;
+]
+
+---
+
+# **Where are we going**
+
+.pull-left[
+- Creating objects in R
+- Vectors and data types
+- Subsetting vectors
+- Missing data
+- Data frames
+- Indexing and subsetting data frames
+- Factors
+]
+
+---
+
+# **Why R**
+
+.pull-left[
+- Does not involve lots of pointing and clicking, and that’s a good thing
+- Great for reproducibility
+- Interdisciplinary and extensible
+- Works on data of all shapes and sizes
+- Produces high-quality graphics
+- Large and welcoming community
+- Open-source and cross-platform
+- Free, legally free!
+]
+
+.pull-right[
+&lt;img src="salute-2.gif" width="100%"&gt;
+]
+
+---
+
+# **Why RStudio**
+
+- Integrated Development Environment (IDE) for working with R
+- Open-source and cross-platform
+- Free, legally free!
+- Write code, navigate files, inspect variables, and visualize plots.
+- Also used for other things (version control, developing packages, writing Shiny apps)
+
+---
+
+# **Help**
+
+.pull-left[
+Nametags: Flip your nametags to the red end
+
+Help Documentation: e.g. `?round`, `args(round)`, `??rounding`
+
+Cheatsheet: http://github.com/rstudio/cheatsheets/raw/master/base-r.pdf
+]
+
+.pull-right[
+&lt;img src="help-1.gif" width="100%"&gt;
+]
+
+---
+
+# **Challenge**
+
+What are the values after each statement in the following?
+
+
+```r
+mass &lt;- 47.5            # mass?
+age  &lt;- 122             # age?
+mass &lt;- mass * 2.0      # mass?
+age  &lt;- age - 20        # age?
+mass_index &lt;- mass/age  # mass_index?
+```
+
+---
+
+# **Challenge**
+
+We’ve seen that atomic vectors can be of type character, numeric (or double), integer, and logical. But what happens if we try to mix these types in a single vector?
+
+&lt;span&gt;1.&lt;/span&gt; What will happen in each of these examples? (hint: use `class()` to check the data type of your objects):
+
+
+```r
+num_char &lt;- c(1, 2, 3, "a")
+num_logical &lt;- c(1, 2, 3, TRUE)
+char_logical &lt;- c("a", "b", "c", TRUE)
+tricky &lt;- c(1, 2, 3, "4")
+```
+
+&lt;span&gt;2.&lt;/span&gt; How many values in `combined_logical` are `"TRUE"` (as a character) in the following example:
+
+
+```r
+num_logical &lt;- c(1, 2, 3, TRUE)
+char_logical &lt;- c("a", "b", "c", TRUE)
+combined_logical &lt;- c(num_logical, char_logical)
+```
+
+---
+
+# **Challenge**
+
+&lt;span&gt;1.&lt;/span&gt; Using this vector of heights in inches, create a new vector, `heights_no_na`, with the NAs removed.
+
+
+```r
+heights &lt;- c(63, 69, 60, 65, NA, 68, 61, 
+             70, 61, 59, 64, 69, 63, 63, 
+             NA, 72, 65, 64, 70, 63, 65)
+```
+
+&lt;span&gt;2.&lt;/span&gt; Use the function `median()` to calculate the median of the `heights` vector.
+
+&lt;span&gt;3.&lt;/span&gt; Use R to figure out how many people in the set are taller than 67 inches.
+
+---
+
+# **Portal Data**
+
+- Tabular dataset
+- Observations of small mammals/reptiles/birds
+- Collected over more than 40 years
+- 24 plots of a desert ecosystem in Arizona
+- Different experimental manipulations controlling which rodents are allowed to access which plot
+- Real dataset, but simplified
+
+---
+
+# **Rodents**
+
+.pull-left[
+&lt;img src="mouse-1.gif" width="100%"&gt;
+&lt;img src="mouse-2.gif" width="100%"&gt;
+]
+
+.pull-right[
+&lt;img src="mouse-3.gif" width="100%"&gt;
+&lt;img src="mouse-4.gif" width="100%"&gt;
+]
+
+---
+
+# **Lizards**
+
+.pull-left[
+&lt;img src="lizard-1.gif" width="100%"&gt;
+&lt;img src="lizard-2.gif" width="100%"&gt;
+]
+
+.pull-right[
+&lt;img src="lizard-3.gif" width="100%"&gt;
+&lt;img src="lizard-4.gif" width="100%"&gt;
+]
+
+---
+
+# **Sparrows**
+
+.pull-left[
+&lt;img src="sparrow-1.gif" height="75%"&gt;
+]
+
+.pull-right[
+&lt;img src="sparrow-2.gif" width="100%"&gt;
+&lt;img src="sparrow-3.gif" width="100%"&gt;
+]
+
+---
+
+# **Research Questions**
+
+- Is there a difference between the weight of male and female kangaroo rats?
+- Do different species of kangaroo rats have different hindfoot lengths?
+- How does hindfoot length relate to weight the weight of a kangaroo rat?
+- How does the number of Kangaroo rats that get into the enclosure change over time?
+- Is there a difference in the number of kangaroo rats that get into the different enclosures?
+
+---
+
+# **Setup**
+
+We are studying the species repartition and weight of animals caught in plots in our study area.
+
+
+```r
+# download the CSV file that contains the survey data from figshare
+download.file(url="https://ndownloader.figshare.com/files/2292169",
+              destfile = "data/portal_data_joined.csv")
+```
+
+
+```r
+# load into memory the content of the CSV file as an object of class data.frame
+surveys &lt;- read.csv("data/portal_data_joined.csv")
+```
+
+---
+
+# **Presentation of the Survey Data**
+
+Each row holds information for a single animal.
+
+| Column          | Description                        |
+| --------------- | ---------------------------------- |
+| record_id       | Unique id for the observation      |
+| month           | Month of observation               |
+| day             | Day of observation                 |
+| year            | Year of observation                |
+| plot_id         | ID of a particular plot            |
+| species_id      | 2-letter code                      |
+| sex             | Sex of animal (“M”, “F”)           |
+| hindfoot_length | Length of the hindfoot in mm       |
+| weight          | Weight of the animal in grams      |
+| genus           | Genus of animal                    |
+| species         | Species of animal                  |
+| taxon           | e.g. Rodent, Reptile, Bird, Rabbit |
+| plot_type       | Type of plot                       |
+
+---
+
+# Challenge
+
+Based on the output of `str(surveys)`, can you answer the following questions?
+
+1. What is the class of the object `surveys`?
+2. How many rows and how many columns are in this object?
+3. How many species have been recorded during these surveys?
+
+---
+
+# Challenge
+
+1. Create a `data.frame` (`surveys_200`) containing only the data in row 200 of the `surveys` dataset.
+
+2. Notice how `nrow()` gave you the number of rows in a `data.frame`?
+
+  - Use that number to pull out just that last row in the data frame.
+  - Compare that with what you see as the last row using `tail()` to make sure it’s meeting expectations.
+  - Pull out that last row using `nrow()` instead of the row number.
+  - Create a new data frame (`surveys_last`) from that last row.
+
+3. Use `nrow()` to extract the row that is in the middle of the data frame. Store the content of this row in an object named `surveys_middle`.
+
+4. Combine `nrow()` with the - notation above to reproduce the behavior of `head(surveys)`, keeping just the first through 6th rows of the `surveys` dataset.
+
+---
+
+# Challenge
+
+1. Rename "F" and "M" to "female" and "male" respectively.
+2. Now that we have renamed the factor level to "undetermined", can you recreate the barplot such that "undetermined" is last (after "male")?
+
+---
+
+# Challenge
+
+&lt;span&gt;1.&lt;/span&gt; We have seen how data frames are created when using `read.csv()`, but they can also be created by hand with the `data.frame()` function. There are a few mistakes in this hand-crafted `data.frame`. Can you spot and fix them? Don’t hesitate to experiment!
+
+
+```r
+animal_data &lt;- data.frame(
+          animal = c(dog, cat, sea cucumber, sea urchin),
+          feel = c("furry", "squishy", "spiny"),
+          weight = c(45, 8 1.1, 0.8)
+          )
+```
+
+---
+
+# Challenge
+
+&lt;span&gt;2.&lt;/span&gt; Can you predict the class for each of the columns in the following example? Check your guesses using `str(country_climate)`:
+
+  - Are they what you expected? Why? Why not?
+  - What would have been different if we had added `stringsAsFactors = FALSE` when creating the data frame?
+  - What would you need to change to ensure that each column had the accurate data type?
+
+
+```r
+country_climate &lt;- data.frame(
+       country = c("Canada", "Panama", "South Africa", "Australia"),
+       climate = c("cold", "hot", "temperate", "hot/temperate"),
+       temperature = c(10, 30, 18, "15"),
+       northern_hemisphere = c(TRUE, TRUE, FALSE, "FALSE"),
+       has_kangaroo = c(FALSE, FALSE, FALSE, 1)
+       )
+```
+
+---
+
+# **Setup**
+
+.pull-left[
+`tidyverse` installs several packages useful for data analysis such as `tidyr`, `dplyr`, `ggplot2`, `tibble`, etc.
+
+Let's load `lubridate`.
+
+
+```r
+# install the tidyverse packages including dplyr
+install.packages(tidyverse)
+```
+
+
+```r
+# load the tidyverse package lubridate
+library(lubridate)
+```
+]
+
+.pull-right[
+&lt;img src="tidyverse-1.jpeg" width="100%"&gt;
+] 
+
+---
+
+class: middle
+
+# **Epilogue**
+
+&lt;img src="phdcomics.png" width="100%"&gt;
+
+---
+
+class: middle
+
+# **Thank You**
+
+.pull-left[
+&lt;img src="salute-1.gif" width="100%"&gt;
+]
+
+.pull-right[
+&lt;img src="thumbs-up-1.gif" width="100%"&gt;
+]
+
+&lt;style type="text/css"&gt;
+.remark-code{line-height: 1.5; font-size: 75%}
+&lt;/style&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"ratio": "16:10",
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();</script>
+
+<script>
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
