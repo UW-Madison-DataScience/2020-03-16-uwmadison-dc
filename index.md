@@ -7,10 +7,10 @@ address: "McArdle 1106, Madison, WI 53715"      # full street address of worksho
 country: "us"      # lowercase two-letter ISO country code such as "fr" (see https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
 language: "en"     # lowercase two-letter ISO language code such as "fr" (see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 latlng: "43.076090,-89.413380"       # decimal latitude and longitude of workshop venue (e.g., "41.7901128,-87.6007318" - use https://www.latlong.net/)
-humandate: "September 11, 18, 25, October 2 & 9, 2019"    # human-readable dates for the workshop (e.g., "Feb 17-18, 2020")
+humandate: "March 16, 17"    # human-readable dates for the workshop (e.g., "Feb 17-18, 2020")
 humantime: "8:30 a.m. - 12:00 p.m."    # human-readable times for the workshop (e.g., "9:00 am - 4:30 pm")
-startdate: 2019-09-11      # machine-readable start date for the workshop in YYYY-MM-DD format like 2015-01-01
-enddate: 2019-10-09        # machine-readable end date for the workshop in YYYY-MM-DD format like 2015-01-02
+startdate: 2020-03-16      # machine-readable start date for the workshop in YYYY-MM-DD format like 2015-01-01
+enddate: 2020-03-17        # machine-readable end date for the workshop in YYYY-MM-DD format like 2015-01-02
 instructor: ["TBA"] # boxed, comma-separated list of instructors' names as strings, like ["Kay McNulty", "Betty Jennings", "Betty Snyder"]
 helper: ["TBA"]     # boxed, comma-separated list of helpers' names, like ["Marlyn Wescoff", "Fran Bilas", "Ruth Lichterman"]
 email: ["contact@datascience.wisc.edu"]    # boxed, comma-separated list of contact email addresses for the host, lead instructor, or whoever else is handling questions, like ["marlyn.wescoff@example.org", "fran.bilas@example.org", "ruth.lichterman@example.org"]
