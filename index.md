@@ -3,7 +3,7 @@ layout: workshop      # DON'T CHANGE THIS.
 carpentry: "dc"    # what kind of Carpentry (must be either "lc" or "dc" or "swc").  
                       # Be sure to update the Carpentry type in _config.yml as well.  
 venue: "Data Carpentry @ UW-Madison"        # brief name of host site without address (e.g., "Euphoric State University")
-address: "BioCommons 110A/B, Steenbock Memorial Library, 550 Babcock Drive, Madison, WI 53715"      # full street address of workshop (e.g., "Room A, 123 Forth Street, Blimingen, Euphoria")
+address: "McArdle 1106, Madison, WI 53715"      # full street address of workshop (e.g., "Room A, 123 Forth Street, Blimingen, Euphoria")
 country: "us"      # lowercase two-letter ISO country code such as "fr" (see https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
 language: "en"     # lowercase two-letter ISO language code such as "fr" (see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
 latlng: "43.076090,-89.413380"       # decimal latitude and longitude of workshop venue (e.g., "41.7901128,-87.6007318" - use https://www.latlong.net/)
@@ -11,8 +11,8 @@ humandate: "September 11, 18, 25, October 2 & 9, 2019"    # human-readable dates
 humantime: "8:30 a.m. - 12:00 p.m."    # human-readable times for the workshop (e.g., "9:00 am - 4:30 pm")
 startdate: 2019-09-11      # machine-readable start date for the workshop in YYYY-MM-DD format like 2015-01-01
 enddate: 2019-10-09        # machine-readable end date for the workshop in YYYY-MM-DD format like 2015-01-02
-instructor: ["Trisha Adamus", "Srikanth Aravamuthan", "Michael Liou", "Clare Michaud"] # boxed, comma-separated list of instructors' names as strings, like ["Kay McNulty", "Betty Jennings", "Betty Snyder"]
-helper: ["Trisha Adamus", "Michael Liou", "Tobin Magle", "Lauren Michael", "Clare Michaud"]     # boxed, comma-separated list of helpers' names, like ["Marlyn Wescoff", "Fran Bilas", "Ruth Lichterman"]
+instructor: ["TBA"] # boxed, comma-separated list of instructors' names as strings, like ["Kay McNulty", "Betty Jennings", "Betty Snyder"]
+helper: ["TBA"]     # boxed, comma-separated list of helpers' names, like ["Marlyn Wescoff", "Fran Bilas", "Ruth Lichterman"]
 email: ["contact@datascience.wisc.edu"]    # boxed, comma-separated list of contact email addresses for the host, lead instructor, or whoever else is handling questions, like ["marlyn.wescoff@example.org", "fran.bilas@example.org", "ruth.lichterman@example.org"]
 collaborative_notes: https://pad.carpentries.org/2019-09-11-uwmadison-dc # optional: URL for the workshop collaborative notes, e.g. an Etherpad or Google Docs document
 eventbrite: "68159606217"           # optional: alphanumeric key for Eventbrite registration, e.g., "1234567890AB" (if Eventbrite is being used)
