@@ -507,20 +507,3 @@ please preview your site before committing, and make sure to run
   </div>
 </div> {% comment %} End of 'OpenRefine' section. {% endcomment %}
 
-# Additional Resources
-
-#### R Slides
-
-* [Intro to R](slides/base/base.html)
-* [dplyr](slides/dplyr/dplyr.html)
-* [ggplot2](slides/ggplot2/ggplot2.html)
-
-#### R Markdown Examples
-
-* For generating website pages see this [example `.Rmd` file for Introduction to R material](https://raw.githubusercontent.com/lioumens/lioumens.github.io/master/resources/Intro_to_R.Rmd) - and the [generated html file](https://lioumens.github.io/resources/Intro_to_R.html)
-* The slides that we presented for the R section was also generated with R Markdown, you can see [the source for the dplyr slides on the Github Page](slides/dplyr/dplyr.Rmd)
-* Professional reports in PDF can also be created. Here's [an example report crated for a class final project](https://github.com/lioumens/stat771_final/blob/master/report/liou_771_final.pdf) with the [`.Rmd` source here](https://raw.githubusercontent.com/lioumens/stat771_final/master/report/liou_771_final.Rmd)
-
-#### R Code Files
-
-* [R Code Files from Workshop](code/DC_R.zip) - The link will download a `.zip` file, which includes the data that we had used for the R portion of the workshop.
