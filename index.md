@@ -46,6 +46,7 @@ are not using Eventbrite, or leave it in, since it will not be
 displayed if the 'eventbrite' field in the header is not set.
 {% endcomment %}
 {% if page.eventbrite %}
+<!--
 <iframe
   src="https://www.eventbrite.com/tickets-external?eid={{page.eventbrite}}&ref=etckt"
   frameborder="0"
@@ -53,6 +54,7 @@ displayed if the 'eventbrite' field in the header is not set.
   height="280px"
   scrolling="auto">
 </iframe>
+-->
 {% endif %}
 
 
