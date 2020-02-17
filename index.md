@@ -6,7 +6,7 @@ venue: "Data Carpentry @ UW-Madison"        # brief name of host site without ad
 address: "McArdle Building, Room 1106, Madison, WI 53715"      # full street address of workshop (e.g., "Room A, 123 Forth Street, Blimingen, Euphoria")
 country: "us"      # lowercase two-letter ISO country code such as "fr" (see https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes)
 language: "en"     # lowercase two-letter ISO language code such as "fr" (see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes)
-latlng: "43.076090,-89.413380"       # decimal latitude and longitude of workshop venue (e.g., "41.7901128,-87.6007318" - use https://www.latlong.net/)
+latlng: "43.074483,-89.409173"       # decimal latitude and longitude of workshop venue (e.g., "41.7901128,-87.6007318" - use https://www.latlong.net/)
 humandate: "March 16-17, 2020"    # human-readable dates for the workshop (e.g., "Feb 17-18, 2020")
 humantime: "8:30 a.m. - 4:30 p.m."    # human-readable times for the workshop (e.g., "9:00 am - 4:30 pm")
 startdate: 2020-03-16      # machine-readable start date for the workshop in YYYY-MM-DD format like 2015-01-01
